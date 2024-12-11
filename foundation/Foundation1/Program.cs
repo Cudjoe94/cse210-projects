@@ -1,18 +1,9 @@
-// Class Diagram Description:
-//
-// 1. Class: Video
-//    - Attributes: Title (string), Author (string), LengthInSeconds (int), Comments (List<Comment>)
-//    - Methods: GetNumberOfComments() (int), AddComment(Comment), DisplayVideoInfo()
-//
-// 2. Class: Comment
-//    - Attributes: CommenterName (string), Text (string)
-//    - Methods: None
-
 using System;
 using System.Collections.Generic;
 
 namespace YouTubeVideoTracking
 {
+    // Program class
     class Program
     {
         static void Main(string[] args)
@@ -50,24 +41,24 @@ namespace YouTubeVideoTracking
         public string Title { get; private set; }
         public string Author { get; private set; }
         public int LengthInSeconds { get; private set; }
-        private List<Comment> Comments;
+        private List<Comment> _comments;
 
         public Video(string title, string author, int lengthInSeconds)
         {
             Title = title;
             Author = author;
             LengthInSeconds = lengthInSeconds;
-            Comments = new List<Comment>();
+            _comments = new List<Comment>();
         }
 
         public void AddComment(Comment comment)
         {
-            Comments.Add(comment);
+            _comments.Add(comment);
         }
 
         public int GetNumberOfComments()
         {
-            return Comments.Count;
+            return _comments.Count;
         }
 
         public void DisplayVideoInfo()
@@ -78,7 +69,7 @@ namespace YouTubeVideoTracking
             Console.WriteLine($"Number of Comments: {GetNumberOfComments()}");
             Console.WriteLine("Comments:");
 
-            foreach (var comment in Comments)
+            foreach (var comment in _comments)
             {
                 Console.WriteLine($"- {comment.CommenterName}: {comment.Text}");
             }
