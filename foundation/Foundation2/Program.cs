@@ -1,174 +1,141 @@
-// Class Diagram Description:
-//
-// 1. Class: Order
-//    - Attributes: Products (List<Product>), Customer (Customer)
-//    - Methods: CalculateTotalCost(), GetPackingLabel(), GetShippingLabel()
-//
-// 2. Class: Product
-//    - Attributes: Name (string), ProductId (string), Price (decimal), Quantity (int)
-//    - Methods: GetTotalCost()
-//
-// 3. Class: Customer
-//    - Attributes: Name (string), Address (Address)
-//    - Methods: IsInUSA()
-//
-// 4. Class: Address
-//    - Attributes: Street (string), City (string), State (string), Country (string)
-//    - Methods: IsInUSA(), ToString()
-
-using System;
-using System.Collections.Generic;
-
-namespace OnlineOrderingSystem
+// Product.cs
+public class Product
 {
-    class Program
+    private string _name;
+    private string _productId;
+    private decimal _price;
+    private int _quantity;
+
+    public Product(string name, string productId, decimal price, int quantity)
     {
-        static void Main(string[] args)
-        {
-            // Create sample addresses
-            Address address1 = new Address("123 Main St", "New York", "NY", "USA");
-            Address address2 = new Address("456 Elm St", "Toronto", "ON", "Canada");
-
-            // Create sample customers
-            Customer customer1 = new Customer("John Doe", address1);
-            Customer customer2 = new Customer("Jane Smith", address2);
-
-            // Create sample products
-            Product product1 = new Product("Laptop", "P001", 1000.00m, 1);
-            Product product2 = new Product("Mouse", "P002", 25.00m, 2);
-            Product product3 = new Product("Keyboard", "P003", 50.00m, 1);
-            Product product4 = new Product("Monitor", "P004", 200.00m, 1);
-
-            // Create sample orders
-            Order order1 = new Order(customer1);
-            order1.AddProduct(product1);
-            order1.AddProduct(product2);
-
-            Order order2 = new Order(customer2);
-            order2.AddProduct(product3);
-            order2.AddProduct(product4);
-
-            // Display order details
-            Console.WriteLine("Order 1 Details:");
-            Console.WriteLine(order1.GetPackingLabel());
-            Console.WriteLine(order1.GetShippingLabel());
-            Console.WriteLine($"Total Cost: ${order1.CalculateTotalCost():F2}");
-
-            Console.WriteLine();
-
-            Console.WriteLine("Order 2 Details:");
-            Console.WriteLine(order2.GetPackingLabel());
-            Console.WriteLine(order2.GetShippingLabel());
-            Console.WriteLine($"Total Cost: ${order2.CalculateTotalCost():F2}");
-        }
+        _name = name;
+        _productId = productId;
+        _price = price;
+        _quantity = quantity;
     }
 
-    public class Order
+    public decimal GetTotalCost()
     {
-        private List<Product> Products;
-        private Customer Customer;
-
-        public Order(Customer customer)
-        {
-            Customer = customer;
-            Products = new List<Product>();
-        }
-
-        public void AddProduct(Product product)
-        {
-            Products.Add(product);
-        }
-
-        public decimal CalculateTotalCost()
-        {
-            decimal total = 0;
-            foreach (var product in Products)
-            {
-                total += product.GetTotalCost();
-            }
-
-            // Add shipping cost
-            total += Customer.IsInUSA() ? 5.00m : 35.00m;
-            return total;
-        }
-
-        public string GetPackingLabel()
-        {
-            string label = "Packing Label:\n";
-            foreach (var product in Products)
-            {
-                label += $"- {product.Name} (ID: {product.ProductId})\n";
-            }
-            return label;
-        }
-
-        public string GetShippingLabel()
-        {
-            return $"Shipping Label:\n{Customer.Name}\n{Customer.Address}";
-        }
+        return _price * _quantity;
     }
 
-    public class Product
+    public string Name => _name;
+    public string ProductId => _productId;
+}
+
+// Address.cs
+public class Address
+{
+    private string _streetAddress;
+    private string _city;
+    private string _stateOrProvince;
+    private string _country;
+
+    public Address(string streetAddress, string city, string stateOrProvince, string country)
     {
-        public string Name { get; private set; }
-        public string ProductId { get; private set; }
-        public decimal Price { get; private set; }
-        public int Quantity { get; private set; }
-
-        public Product(string name, string productId, decimal price, int quantity)
-        {
-            Name = name;
-            ProductId = productId;
-            Price = price;
-            Quantity = quantity;
-        }
-
-        public decimal GetTotalCost()
-        {
-            return Price * Quantity;
-        }
+        _streetAddress = streetAddress;
+        _city = city;
+        _stateOrProvince = stateOrProvince;
+        _country = country;
     }
 
-    public class Customer
+    public bool IsInUSA()
     {
-        public string Name { get; private set; }
-        public Address Address { get; private set; }
-
-        public Customer(string name, Address address)
-        {
-            Name = name;
-            Address = address;
-        }
-
-        public bool IsInUSA()
-        {
-            return Address.IsInUSA();
-        }
+        return _country == "USA";
     }
 
-    public class Address
+    public string GetFullAddress()
     {
-        public string Street { get; private set; }
-        public string City { get; private set; }
-        public string State { get; private set; }
-        public string Country { get; private set; }
+        return $"{_streetAddress}\n{_city}, {_stateOrProvince}\n{_country}";
+    }
+}
 
-        public Address(string street, string city, string state, string country)
-        {
-            Street = street;
-            City = city;
-            State = state;
-            Country = country;
-        }
+// Customer.cs
+public class Customer
+{
+    private string _name;
+    private Address _address;
 
-        public bool IsInUSA()
-        {
-            return Country.ToLower() == "usa";
-        }
+    public Customer(string name, Address address)
+    {
+        _name = name;
+        _address = address;
+    }
 
-        public override string ToString()
+    public bool LivesInUSA()
+    {
+        return _address.IsInUSA();
+    }
+
+    public string Name => _name;
+    public Address Address => _address;
+}
+
+// Order.cs
+public class Order
+{
+    private List<Product> _products;
+    private Customer _customer;
+
+    public Order(List<Product> products, Customer customer)
+    {
+        _products = products;
+        _customer = customer;
+    }
+
+    public decimal GetTotalCost()
+    {
+        decimal totalCost = _products.Sum(p => p.GetTotalCost());
+        decimal shippingCost = _customer.LivesInUSA() ? 5 : 35;
+        return totalCost + shippingCost;
+    }
+
+    public string GetPackingLabel()
+    {
+        return string.Join("\n", _products.Select(p => $"{p.Name} ({p.ProductId})"));
+    }
+
+    public string GetShippingLabel()
+    {
+        return $"{_customer.Name}\n{_customer.Address.GetFullAddress()}";
+    }
+}
+
+// Program.cs
+class Program
+{
+    static void Main(string[] args)
+    {
+        Address address1 = new Address("123 Main St", "Anytown", "CA", "USA");
+        Customer customer1 = new Customer("John Doe", address1);
+        List<Product> products1 = new List<Product>
         {
-            return $"{Street}\n{City}, {State}\n{Country}";
-        }
+            new Product("Widget", "W123", 10.00m, 2),
+            new Product("Gadget", "G456", 15.00m, 1)
+        };
+        Order order1 = new Order(products1, customer1);
+
+        Address address2 = new Address("456 Elm St", "Othertown", "ON", "Canada");
+        Customer customer2 = new Customer("Jane Smith", address2);
+        List<Product> products2 = new List<Product>
+        {
+            new Product("Thingamajig", "T789", 20.00m, 3),
+            new Product("Doohickey", "D012", 25.00m, 2)
+        };
+        Order order2 = new Order(products2, customer2);
+
+        Console.WriteLine("Order 1:");
+        Console.WriteLine($"Total Cost: {order1.GetTotalCost()}");
+        Console.WriteLine("Packing Label:");
+        Console.WriteLine(order1.GetPackingLabel());
+        Console.WriteLine("Shipping Label:");
+        Console.WriteLine(order1.GetShippingLabel());
+
+        Console.WriteLine("\nOrder 2:");
+        Console.WriteLine($"Total Cost: {order2.GetTotalCost()}");
+        Console.WriteLine("Packing Label:");
+        Console.WriteLine(order2.GetPackingLabel());
+        Console.WriteLine("Shipping Label:");
+        Console.WriteLine(order2.GetShippingLabel());
     }
 }
