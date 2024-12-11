@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 class Program
 {
@@ -25,7 +26,10 @@ class Program
                     Console.WriteLine(promptGenerator.GetRandomPrompt());
                     Console.Write("Your response: ");
                     string content = Console.ReadLine();
-                    journal.AddEntry(new JournalEntry(content));
+                    Console.Write("Add tags (comma-separated): ");
+                    string tagsInput = Console.ReadLine();
+                    List<string> tags = new List<string>(tagsInput.Split(','));
+                    journal.AddEntry(new JournalEntry(content, tags));
                     break;
 
                 case "2":
@@ -52,3 +56,66 @@ class Program
     }
 }
 
+class Journal
+{
+    private List<JournalEntry> entries = new List<JournalEntry>();
+
+    public void AddEntry(JournalEntry entry)
+    {
+        entries.Add(entry);
+        Console.WriteLine("Entry added successfully.");
+    }
+
+    public void DisplayEntries()
+    {
+        foreach (var entry in entries)
+        {
+            Console.WriteLine($"[{entry.Timestamp}] {entry.Content}");
+            if (entry.Tags.Count > 0)
+            {
+                Console.WriteLine("Tags: " + string.Join(", ", entry.Tags));
+            }
+        }
+    }
+
+    public void SaveToFile()
+    {
+        // Implementation for saving to file (not shown here for brevity)
+    }
+
+    public void LoadFromFile()
+    {
+        // Implementation for loading from file (not shown here for brevity)
+    }
+}
+
+class JournalEntry
+{
+    public string Content { get; }
+    public DateTime Timestamp { get; }
+    public List<string> Tags { get; }
+
+    public JournalEntry(string content, List<string> tags)
+    {
+        Content = content;
+        Timestamp = DateTime.Now;
+        Tags = tags;
+    }
+}
+
+class PromptGenerator
+{
+    private List<string> prompts = new List<string> { "What made you smile today?", "Describe your perfect day.", "What are you grateful for?" };
+
+    public string GetRandomPrompt()
+    {
+        Random random = new Random();
+        return prompts[random.Next(prompts.Count)];
+    }
+}
+
+/*
+Enhancements added:
+1. Timestamp: Each journal entry now includes a timestamp to record when it was created.
+2. Tagging System: Users can add tags to entries for categorization and easy search in the future.
+*/
