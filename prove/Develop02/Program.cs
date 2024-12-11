@@ -54,3 +54,8 @@ class Program
         }
     }
 }
+/*
+Enhancements added:
+1. Timestamp: Each journal entry now includes a timestamp to record when it was created.
+2. Tagging System: Users can add tags to entries for categorization and easy search in the future.
+*/ 
