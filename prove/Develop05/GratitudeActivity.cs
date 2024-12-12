@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using MindfulnessApp;
 
 class GratitudeActivity : MindfulnessActivity
 {

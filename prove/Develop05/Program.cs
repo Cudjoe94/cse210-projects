@@ -1,6 +1,5 @@
-// Program.cs
 using System;
-using System.IO;
+using MindfulnessApp;
 
 class Program
 {

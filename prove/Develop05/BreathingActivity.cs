@@ -1,4 +1,5 @@
 using System;
+using MindfulnessApp;
 
 class BreathingActivity : MindfulnessActivity
 {
