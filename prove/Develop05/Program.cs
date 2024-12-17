@@ -1,81 +1,58 @@
 using System;
-using MindfulnessApp;
 
 class Program
 {
-    static void Main()
+    // Exceeding Core Requirements Report:
+    // 1. Reusable Spinner and Countdown Animations:
+    //    The spinner and countdown are implemented as reusable methods in the base class `Activity`. These methods help improve the user experience with smooth and engaging animations during pauses.
+    //
+    // 2. Randomized Prompts and Questions:
+    //    The `ListingActivity` and `ReflectingActivity` classes randomly select prompts and reflection questions. This ensures variety in each activity, making it more engaging and personalized for each session.
+    //
+    // 3. Polished User Input Flow:
+    //    The program gracefully handles user input by prompting for activity duration and providing consistent and clear transition messages between steps, making the experience smoother and user-friendly.
+    //
+    // 4. Duration Flexibility:
+    //    Users can input a custom duration for each activity, which allows the program to be flexible to different time constraints, whether the user wants a quick 5-minute activity or a longer session.
+    //
+    // 5. Encapsulation and Abstraction:
+    //    The base class `Activity` encapsulates all common attributes (name, description, duration) and behaviors (starting and ending messages, animations), ensuring good object-oriented design and avoiding unnecessary repetition.
+    //
+    // 6. Extendable Design:
+    //    The program's design is extendable, allowing easy addition of new activities in the future by simply inheriting from the base class and overriding necessary methods.
+    //
+    static void Main(string[] args)
     {
-        Console.WriteLine("Welcome to the Enhanced Mindfulness Program!");
-
         while (true)
         {
-            Console.WriteLine("\nSelect an activity:");
-            Console.WriteLine("1. Breathing");
-            Console.WriteLine("2. Gratitude Journal");
-            Console.WriteLine("3. View Logs");
-            Console.WriteLine("4. Exit");
+            Console.Clear();
+            Console.WriteLine("Mindfulness Program\n");
+            Console.WriteLine("1. Breathing Activity");
+            Console.WriteLine("2. Listing Activity");
+            Console.WriteLine("3. Reflecting Activity");
+            Console.WriteLine("4. Quit");
+            Console.Write("Choose an option: ");
 
             string choice = Console.ReadLine();
-            MindfulnessActivity activity = null;
 
             switch (choice)
             {
                 case "1":
-                    activity = new BreathingActivity();
+                    new BreathingActivity().Run();
                     break;
                 case "2":
-                    activity = new GratitudeActivity();
+                    new ListingActivity().Run();
                     break;
                 case "3":
-                    ShowLogs();
-                    continue;
+                    new ReflectingActivity().Run();
+                    break;
                 case "4":
-                    Console.WriteLine("Goodbye!");
+                    Console.WriteLine("Thank you for using the program. Goodbye!");
                     return;
                 default:
-                    Console.WriteLine("Invalid choice. Please try again.");
-                    continue;
+                    Console.WriteLine("Invalid option. Try again.");
+                    break;
             }
-
-            activity.StartActivity();
-        }
-    }
-
-    static void ShowLogs()
-    {
-        string logFilePath = "SessionLog.txt";
-        string gratitudeLogFilePath = "GratitudeLog.txt";
-
-        Console.WriteLine("\nActivity Logs:");
-
-        if (File.Exists(logFilePath))
-        {
-            Console.WriteLine(File.ReadAllText(logFilePath));
-        }
-        else
-        {
-            Console.WriteLine("No activity logs available.");
-        }
-
-        Console.WriteLine("\nGratitude Logs:");
-        if (File.Exists(gratitudeLogFilePath))
-        {
-            Console.WriteLine(File.ReadAllText(gratitudeLogFilePath));
-        }
-        else
-        {
-            Console.WriteLine("No gratitude logs available.");
         }
     }
 }
-
-/* 
-Exceeding Requirements:
-1. Added a log viewer feature to display both session logs and gratitude logs.
-2. Implemented animations for countdown and spinner to enhance user experience.
-3. Designed the program to use separate files for each class, adhering to SOLID principles.
-4. Enhanced usability by allowing the user to select activities dynamically from a menu.
-5. Included detailed prompts and feedback for each activity to make the interface intuitive.
-6. Added graceful error handling for invalid input during duration entry.
-7. Modularized the logging system for easier maintenance and future extensions.
-*/
